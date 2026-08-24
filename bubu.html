@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BUBU 😡</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #120000;
+    font-family: 'Impact', 'Arial Black', sans-serif;
+    cursor: crosshair;
+  }
+
+  /* ---------- Raging background ---------- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: -50%;
+    background:
+      radial-gradient(circle at 25% 25%, #ff2200aa 0%, transparent 40%),
+      radial-gradient(circle at 75% 70%, #ff6600aa 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, #990000cc 0%, transparent 55%),
+      linear-gradient(135deg, #2a0000, #0d0000, #3a0a00);
+    animation: rage 8s linear infinite;
+    z-index: -3;
+  }
+  @keyframes rage {
+    0%   { transform: rotate(0deg) scale(1.15); filter: hue-rotate(0deg); }
+    50%  { transform: rotate(180deg) scale(1.4); filter: hue-rotate(-18deg); }
+    100% { transform: rotate(360deg) scale(1.15); filter: hue-rotate(0deg); }
+  }
+
+  /* Angry red flashing overlay */
+  .flash {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 30%, #ff0000 160%);
+    mix-blend-mode: screen;
+    opacity: .18;
+    animation: flash 1.1s steps(2, end) infinite;
+    z-index: -2;
+    pointer-events: none;
+  }
+  @keyframes flash {
+    0%, 100% { opacity: .10; }
+    50%      { opacity: .32; }
+  }
+
+  /* Lightning strike */
+  .lightning {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    z-index: 4;
+    pointer-events: none;
+    animation: strike 6s steps(1, end) infinite;
+  }
+  @keyframes strike {
+    0%, 92%, 100% { opacity: 0; }
+    93%           { opacity: .55; }
+    94%           { opacity: 0; }
+    95%           { opacity: .35; }
+    96%           { opacity: 0; }
+  }
+
+  /* ---------- Center stage (whole thing quakes) ---------- */
+  .stage {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    z-index: 2;
+    animation: quake .35s linear infinite;
+  }
+  @keyframes quake {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    20%  { transform: translate(-4px, 3px) rotate(-.5deg); }
+    40%  { transform: translate(5px, -3px) rotate(.5deg); }
+    60%  { transform: translate(-3px, -4px) rotate(-.4deg); }
+    80%  { transform: translate(4px, 4px) rotate(.4deg); }
+    100% { transform: translate(0, 0) rotate(0deg); }
+  }
+
+  /* Pulsing fury glow behind the name */
+  .fury {
+    position: absolute;
+    width: 32rem;
+    height: 32rem;
+    max-width: 92vw;
+    max-height: 92vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ff330099 0%, #ff660044 40%, transparent 70%);
+    animation: fury .55s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes fury {
+    0%, 100% { transform: scale(1);    opacity: .85; }
+    50%      { transform: scale(1.18); opacity: 1;   }
+  }
+
+  /* Shockwave rings blasting outward */
+  .shock {
+    position: absolute;
+    width: 14rem;
+    height: 14rem;
+    border: 3px solid #ff4400;
+    border-radius: 50%;
+    animation: shock 1.6s ease-out infinite;
+    pointer-events: none;
+  }
+  .shock:nth-child(2) { animation-delay: .53s; }
+  .shock:nth-child(3) { animation-delay: 1.06s; }
+  @keyframes shock {
+    0%   { transform: scale(.5); opacity: .9; border-width: 6px; }
+    100% { transform: scale(3.6); opacity: 0; border-width: 1px; }
+  }
+
+  /* ---------- The name ---------- */
+  .name {
+    position: relative;
+    display: flex;
+    gap: .04em;
+    font-size: clamp(4rem, 20vw, 13rem);
+    letter-spacing: .04em;
+    animation: stomp .7s ease-in-out infinite;
+  }
+  @keyframes stomp {
+    0%, 100% { transform: scale(1) skewX(0deg); }
+    25%      { transform: scale(1.12) skewX(-3deg); }
+    50%      { transform: scale(.96) skewX(2deg); }
+    75%      { transform: scale(1.08) skewX(-2deg); }
+  }
+
+  .name span {
+    background: linear-gradient(180deg, #fff5cc, #ffcc00 30%, #ff5500 65%, #cc0000);
+    background-size: 100% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter:
+      drop-shadow(0 0 14px #ff3300)
+      drop-shadow(0 0 45px #ff2200cc)
+      drop-shadow(0 0 90px #ff000088);
+    animation:
+      molten 1.4s ease-in-out infinite,
+      jitter .18s steps(2, end) infinite,
+      burn .6s ease-in-out infinite;
+  }
+  .name span:nth-child(1) { animation-delay: 0s,    0s,    0s; }
+  .name span:nth-child(2) { animation-delay: .08s, .04s, .12s; }
+  .name span:nth-child(3) { animation-delay: .16s, .08s, .24s; }
+  .name span:nth-child(4) { animation-delay: .24s, .12s, .36s; }
+
+  @keyframes molten {
+    0%, 100% { background-position: 50% 0%; }
+    50%      { background-position: 50% 100%; }
+  }
+  @keyframes jitter {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    25%  { transform: translate(-3px, 2px) rotate(-1.5deg); }
+    50%  { transform: translate(3px, -2px) rotate(1.5deg); }
+    75%  { transform: translate(-2px, -3px) rotate(-1deg); }
+    100% { transform: translate(2px, 3px) rotate(1deg); }
+  }
+  @keyframes burn {
+    0%, 100% { filter: drop-shadow(0 0 14px #ff3300) drop-shadow(0 0 45px #ff2200cc) drop-shadow(0 0 90px #ff000088); }
+    50%      { filter: drop-shadow(0 0 26px #ffaa00) drop-shadow(0 0 75px #ff3300) drop-shadow(0 0 140px #ff0000aa); }
+  }
+
+  /* Angry faces orbiting the name */
+  .orbit {
+    position: absolute;
+    width: 22rem;
+    height: 22rem;
+    max-width: 88vw;
+    max-height: 88vw;
+    animation: spin 5s linear infinite;
+    pointer-events: none;
+  }
+  .orbit.reverse { animation: spin 7s linear infinite reverse; width: 31rem; height: 31rem; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .orbit i {
+    position: absolute;
+    font-style: normal;
+    font-size: 1.9rem;
+    filter: drop-shadow(0 0 10px #ff3300);
+    animation: counterspin 5s linear infinite reverse;
+  }
+  .orbit.reverse i { animation: counterspin 7s linear infinite; }
+  @keyframes counterspin { to { transform: rotate(360deg); } }
+
+  .orbit i:nth-child(1) { top: -1rem; left: 50%; }
+  .orbit i:nth-child(2) { top: 50%; right: -1rem; }
+  .orbit i:nth-child(3) { bottom: -1rem; left: 50%; }
+  .orbit i:nth-child(4) { top: 50%; left: -1rem; }
+
+  /* ---------- Rotating angry messages ---------- */
+  .message {
+    margin-top: 2.5rem;
+    font-family: 'Arial Black', sans-serif;
+    font-size: clamp(1rem, 3.4vw, 1.7rem);
+    color: #ffcf99;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    text-shadow: 0 0 16px #ff3300, 0 0 40px #ff0000;
+    min-height: 2.4em;
+    animation: slam 3s ease-in-out infinite;
+  }
+  @keyframes slam {
+    0%   { opacity: 0; transform: scale(1.6) rotate(-3deg); }
+    12%  { opacity: 1; transform: scale(1) rotate(0deg); }
+    16%  { transform: scale(1.06); }
+    20%  { transform: scale(1); }
+    85%  { opacity: 1; }
+    100% { opacity: 0; transform: scale(.85); }
+  }
+
+  .hint {
+    position: fixed;
+    bottom: 1.6rem;
+    width: 100%;
+    text-align: center;
+    color: #ff8855aa;
+    font-family: 'Arial Black', sans-serif;
+    font-size: .78rem;
+    letter-spacing: .24em;
+    text-transform: uppercase;
+    animation: flash 1.4s ease-in-out infinite;
+  }
+
+  /* ---------- Rising flames & fumes ---------- */
+  .flame {
+    position: fixed;
+    bottom: -60px;
+    font-size: 1.6rem;
+    pointer-events: none;
+    z-index: 1;
+    animation: erupt linear forwards;
+    filter: drop-shadow(0 0 12px #ff3300cc);
+  }
+  @keyframes erupt {
+    0%   { transform: translateY(0) rotate(0deg) scale(.5);      opacity: 0; }
+    10%  { opacity: 1; }
+    50%  { transform: translateY(-45vh) rotate(-160deg) scale(1.3); }
+    90%  { opacity: .9; }
+    100% { transform: translateY(-108vh) rotate(-340deg) scale(.6); opacity: 0; }
+  }
+
+  /* ---------- Falling embers ---------- */
+  .ember {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #ffcc44;
+    box-shadow: 0 0 10px 3px #ff5500;
+    pointer-events: none;
+    z-index: 1;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-10vh) translateX(0) scale(1);  opacity: 0; }
+    10%  { opacity: 1; }
+    100% { transform: translateY(110vh) translateX(40px) scale(.4); opacity: 0; }
+  }
+
+  /* ---------- Click explosion ---------- */
+  .blast {
+    position: fixed;
+    font-size: 1.6rem;
+    pointer-events: none;
+    z-index: 5;
+    animation: blast .8s cubic-bezier(.15,.7,.3,1) forwards;
+  }
+  @keyframes blast {
+    0%   { transform: translate(0,0) scale(.3) rotate(0deg);   opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1.5) rotate(var(--rot)); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flash"></div>
+<div class="lightning"></div>
+
+<div class="stage">
+  <div class="shock"></div>
+  <div class="shock"></div>
+  <div class="shock"></div>
+  <div class="fury"></div>
+
+  <div class="orbit"><i>😡</i><i>🤬</i><i>😤</i><i>💥</i></div>
+  <div class="orbit reverse"><i>🔥</i><i>👊</i><i>⚡</i><i>💣</i></div>
+
+  <h1 class="name" aria-label="BUBU">
+    <span>B</span><span>U</span><span>B</span><span>U</span>
+  </h1>
+
+  <p class="message" id="message">RAGE MODE ACTIVATED 🔥</p>
+</div>
+
+<p class="hint">click anywhere to explode</p>
+
+<script>
+  /* ---- Rotating angry messages ---- */
+  const messages = [
+    'RAGE MODE ACTIVATED 🔥',
+    'DO NOT TEST MY PATIENCE 😤',
+    'ABSOLUTELY FURIOUS 🤬',
+    'STEAM COMING OUT OF EARS 💨',
+    'MAXIMUM ANGER DETECTED ⚠️',
+    'SMASHING EVERYTHING 👊💥',
+    'BUBU IS NOT AMUSED 😠'
+  ];
+  let mi = 0;
+  const msgEl = document.getElementById('message');
+  setInterval(() => {
+    mi = (mi + 1) % messages.length;
+    msgEl.textContent = messages[mi];
+  }, 3000);
+
+  /* ---- Rising flames / fumes ---- */
+  const angry = ['🔥','💥','😡','🤬','😤','💨','⚡','👊','💣','⛈️'];
+  function spawnFlame() {
+    const f = document.createElement('div');
+    f.className = 'flame';
+    f.textContent = angry[Math.floor(Math.random() * angry.length)];
+    f.style.left = Math.random() * 100 + 'vw';
+    f.style.fontSize = (1 + Math.random() * 1.9) + 'rem';
+    f.style.animationDuration = (4 + Math.random() * 4) + 's';
+    f.style.opacity = 0.55 + Math.random() * 0.45;
+    document.body.appendChild(f);
+    setTimeout(() => f.remove(), 9000);
+  }
+  setInterval(spawnFlame, 300);
+  for (let i = 0; i < 16; i++) setTimeout(spawnFlame, i * 180);
+
+  /* ---- Falling embers ---- */
+  for (let i = 0; i < 60; i++) {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    e.style.left = Math.random() * 100 + 'vw';
+    e.style.animationDelay = (Math.random() * 5) + 's';
+    e.style.animationDuration = (2.5 + Math.random() * 4) + 's';
+    document.body.appendChild(e);
+  }
+
+  /* ---- Click / tap explosion ---- */
+  function blast(x, y) {
+    for (let i = 0; i < 18; i++) {
+      const b = document.createElement('div');
+      b.className = 'blast';
+      b.textContent = angry[Math.floor(Math.random() * angry.length)];
+      const angle = (Math.PI * 2 * i) / 18;
+      const dist = 90 + Math.random() * 150;
+      b.style.left = x + 'px';
+      b.style.top = y + 'px';
+      b.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      b.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+      b.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
+      document.body.appendChild(b);
+      setTimeout(() => b.remove(), 850);
+    }
+  }
+  document.addEventListener('click', e => blast(e.clientX, e.clientY));
+  document.addEventListener('touchstart', e => {
+    const t = e.touches[0];
+    blast(t.clientX, t.clientY);
+  }, { passive: true });
+</script>
+
+</body>
+</html>
